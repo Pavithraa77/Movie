@@ -1,0 +1,20 @@
+steps:
+  # Deploy v1
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', './app-v1/app.yaml', '--version=v1', '--quiet']
+    
+  # Deploy v2
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', './app-v2/app.yaml', '--version=v2', '--quiet']
+    
+  # Traffic Splitting
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'app',
+        'services',
+        'set-traffic',
+        'default',
+        '--splits=v1=0.7,v2=0.3',
+        '--quiet'
+      ]
